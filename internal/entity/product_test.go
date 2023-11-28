@@ -12,11 +12,11 @@ func TestNewProduct(t *testing.T) {
 	assert.NotNil(t, p)
 	assert.NotEmpty(t, p.ID)
 	assert.Equal(t, "Keyboard", p.Name)
-	assert.Equal(t, 10, p.Price)
+	assert.Equal(t, 10.0, p.Price)
 }
 
 func TestProductWhenNameIsRequired(t *testing.T) {
-	p, err := NewProduct("", 10)
+	p, err := NewProduct("", 10.0)
 
 	assert.Nil(t, p)
 	assert.Equal(t, ErrNameIsRequired, err)
