@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/victorbrugnolo/go-api-example/configs"
 	"github.com/victorbrugnolo/go-api-example/internal/entity"
 	"github.com/victorbrugnolo/go-api-example/internal/infra/database"
@@ -32,8 +34,11 @@ func main() {
 	productDB := database.NewProduct(db)
 	productHandler := handlers.NewProductHandler(productDB)
 
-	http.HandleFunc("/products", productHandler.CreateProduct)
-	err = http.ListenAndServe(":8000", nil)
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Post("/products", productHandler.CreateProduct)
+
+	err = http.ListenAndServe(":8000", r)
 
 	if err != nil {
 		panic(err)
