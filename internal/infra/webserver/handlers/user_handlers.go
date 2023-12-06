@@ -16,6 +16,10 @@ type UserHandler struct {
 	JwtExpiresIn int
 }
 
+type Error struct {
+	Message string `json:"message"`
+}
+
 func NewUserHandler(userDB database.UserInterface, jwt *jwtauth.JWTAuth, jwtExpiresIn int) *UserHandler {
 	return &UserHandler{
 		UserDB:       userDB,
@@ -61,6 +65,16 @@ func (h *UserHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(accessToken)
 }
 
+// CreateUser user godoc
+// @Summary      Create user
+// @Description  Create user
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        request     body      dto.CreateUserInput  true  "user request"
+// @Success      201
+// @Failure      500         {object}  Error
+// @Router       /users [post]
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user dto.CreateUserInput
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -74,6 +88,8 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorMessage := Error{Message: err.Error()}
+		_ = json.NewEncoder(w).Encode(errorMessage)
 		return
 	}
 
@@ -81,6 +97,8 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorMessage := Error{Message: err.Error()}
+		_ = json.NewEncoder(w).Encode(errorMessage)
 		return
 	}
 
