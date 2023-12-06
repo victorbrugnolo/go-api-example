@@ -4,7 +4,9 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/jwtauth"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/victorbrugnolo/go-api-example/configs"
+	_ "github.com/victorbrugnolo/go-api-example/docs"
 	"github.com/victorbrugnolo/go-api-example/internal/entity"
 	"github.com/victorbrugnolo/go-api-example/internal/infra/database"
 	"github.com/victorbrugnolo/go-api-example/internal/infra/webserver/handlers"
@@ -75,6 +77,8 @@ func main() {
 
 	r.Post("/users", userHandler.CreateUser)
 	r.Post("/users/generate_token", userHandler.GetJwt)
+
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	err = http.ListenAndServe(":8000", r)
 
