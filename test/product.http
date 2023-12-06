@@ -11,7 +11,7 @@ GET http://localhost:8000/products/fd33d253-e74d-4151-a5cf-a4fa9fc0b861 HTTP/1.1
 
 ###
 GET http://localhost:8000/products HTTP/1.1
-
+Authorization: Bearer 
 
 ###
 PUT http://localhost:8000/products/fd33d253-e74d-4151-a5cf-a4fa9fc0b861 HTTP/1.1
